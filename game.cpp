@@ -13,8 +13,6 @@ using namespace std;
 GLdouble width, height;
 int wd;
 
-bool jumping = false;
-
 // create game window
 void init() {
     width = 750;
@@ -57,21 +55,22 @@ void display() {
 
     //////////////////// COLLISION DETECTION BETWEEN PLAYER AND OBSTACLES ////////////////
 
-    // check for collision with player and obstacle
-    if (collision(player, testObj) || collision(player, testObj2) || collision(player, testObj3) ||
-        collision(player, testObj4)){
-        health -= 1;
+    // check for collisions with each generated wall
+    for (Object &wall : walls){
+        if (collision(player, wall)){
+            health -= 1; // decrease health
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////
     drawBackground(); // draw background to screen
-    drawHealthbar(health); // draw healthbar
+    drawHealthbar(health); // draw health bar
 
     //////////////////// DRAW EACH WALL / OBSTACLE TO SCREEN //////////////////////////
-    testObj.draw();
-    testObj2.draw();
-    testObj3.draw();
-    testObj4.draw();
+
+    for (Object &wall : walls){
+        wall.draw();
+    }
     ///////////////////////////////////////////////////////////////////////////////////
     player.draw(); // draw player to screen
 
@@ -104,14 +103,12 @@ void drawBackground(){
 }
 
 void drawHealthbar(int health){
-    cout << health << endl;
     int difference;
     if (health > 0){
-        difference = 2 * (100 - health);
+        difference = 4 * (100 - health);
     } else {
         difference = 200;
     }
-
 
     // red back health bar back splash
     glColor3f(1.0, 0.0, 0.0);
@@ -147,9 +144,6 @@ bool collision(Player player, Object obstacle){
     return true;
 }
 
-
-
-
 void kbdS(int key, int x, int y) {
     switch(key) {
         case GLUT_KEY_DOWN:
@@ -182,39 +176,21 @@ void kbd(unsigned char key, int x, int y)
 
 void cursor(int x, int y) {
 
-    // Alter coordinates of square being drawn to window by (x, y) coordinates of the mouse
-//    int xLen = x2-x1;
-//    int yLen = y2-y1;
-//    x1 = x;
-//    x2 = x1 + xLen;
-//    y1 = y;
-//    y2 = y1 + yLen;
-
     glutPostRedisplay();
 }
 
-// button will be GLUT_LEFT_BUTTON or GLUT_RIGHT_BUTTON
-// state will be GLUT_UP or GLUT_DOWN
 void mouse(int button, int state, int x, int y) {
-//    if (button != 2){ // Change color on left click
-//        if (colorIndex == 4){
-//            colorIndex = 0;
-//        }
-//        currColor = colors[colorIndex];
-//        colorIndex += 1;
-//    }
+
     glutPostRedisplay();
 }
 
 void timer(int dummy) {
 
-
-
     // update all wall positions (move them to the left)
-    testObj.update();
-    testObj2.update();
-    testObj3.update();
-    testObj4.update();
+    for (Object &wall : walls){
+        wall.update();
+    }
+
     ////////////////////////////////////////////////////
     player.jumpListener();
 

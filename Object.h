@@ -27,6 +27,7 @@ public:
     Object();
     Object(int height, int width, int distance, color objCol);
     void setColor(color colorToSet);
+    int getDistance();
     virtual void draw();
     virtual void update();
     virtual Point getTopLeft();
