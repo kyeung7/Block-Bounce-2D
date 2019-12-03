@@ -50,4 +50,8 @@ void Object::setColor(color colorToSet) {
     this->objColor = colorToSet;
 }
 
+int Object::getDistance(){
+    return this->distance;
+}
+
 

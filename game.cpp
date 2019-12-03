@@ -13,8 +13,6 @@ using namespace std;
 GLdouble width, height;
 int wd;
 
-bool jumping = false;
-
 // create game window
 void init() {
     width = 750;
@@ -60,7 +58,7 @@ void display() {
     // check for collisions with each generated wall
     for (Object &wall : walls){
         if (collision(player, wall)){
-            health -= 1;
+            health -= 1; // decrease health
         }
     }
 
@@ -105,14 +103,12 @@ void drawBackground(){
 }
 
 void drawHealthbar(int health){
-    cout << health << endl;
     int difference;
     if (health > 0){
-        difference = 2 * (100 - health);
+        difference = 4 * (100 - health);
     } else {
         difference = 200;
     }
-
 
     // red back health bar back splash
     glColor3f(1.0, 0.0, 0.0);
