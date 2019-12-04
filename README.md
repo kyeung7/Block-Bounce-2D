@@ -1,2 +1,16 @@
 # FinalProjectMajor-KY-JD-CB
-Major Portion of CS120 Final Project
+Team Members:
+
+Connor Burleson
+
+Kevin Yeung
+
+Jordan Deso
+
+# Program Description:
+
+
+# Directions:
+
+
+# Thank You!
