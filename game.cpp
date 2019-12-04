@@ -23,7 +23,7 @@ int health = 100;
 
 // wall / obstacle color
 color testColor{1.0, 0.0, 0.0}; // red
-bool seeYa = false;
+
 // create walls / obstacles
 Object wall1(40, 15, 1150, testColor);
 Object wall2(30, 15, 1000, testColor);
@@ -59,13 +59,10 @@ void display() {
     // check for collisions with each generated wall
     for (Object &wall : walls){
         if (collision(player, wall)){
-            seeYa = true;
             health -= 2; // decrease health
         }
     }
-    if (seeYa){
-        player.setDistance(player.getDistance() - 8);
-    }
+
 
     ///////////////////////////////////////////////////////////////////////////////////////
     drawBackground(); // draw background to screen
