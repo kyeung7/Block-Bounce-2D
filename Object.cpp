@@ -54,4 +54,8 @@ int Object::getDistance(){
     return this->distance;
 }
 
+void Object::setDistance(int dist){
+    this->distance = dist;
+}
+
 

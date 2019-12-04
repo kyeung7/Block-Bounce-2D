@@ -23,15 +23,16 @@ int health = 100;
 
 // wall / obstacle color
 color testColor{1.0, 0.0, 0.0}; // red
-
-Object testObj(40, 15, 1150, testColor); // test wall
-Object testObj2(30, 15, 1000, testColor); // test wall
-Object testObj3(35, 20, 800, testColor); // test wall
-Object testObj4(30, 10, 500, testColor); // test wall
+bool seeYa = false;
+// create walls / obstacles
+Object wall1(40, 15, 1150, testColor);
+Object wall2(30, 15, 1000, testColor);
+Object wall3(35, 20, 800, testColor);
+Object wall4(30, 10, 500, testColor);
 
 Player player(20, 20, 80, color{1.0, 1.0, 1.0}, 400); // test player on ground (yHeight = 400)
 
-vector<Object> walls{testObj, testObj2, testObj3, testObj4};
+vector<Object> walls{wall1, wall2, wall3, wall4};
 
 // initialize OpenGL graphics
 void initGL() {
@@ -58,8 +59,12 @@ void display() {
     // check for collisions with each generated wall
     for (Object &wall : walls){
         if (collision(player, wall)){
-            health -= 1; // decrease health
+            seeYa = true;
+            health -= 2; // decrease health
         }
+    }
+    if (seeYa){
+        player.setDistance(player.getDistance() - 8);
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -105,7 +110,7 @@ void drawBackground(){
 void drawHealthbar(int health){
     int difference;
     if (health > 0){
-        difference = 4 * (100 - health);
+        difference = 2 * (100 - health);
     } else {
         difference = 200;
     }
