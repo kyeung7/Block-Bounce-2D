@@ -14,7 +14,8 @@
 using namespace std;
 
 // GLOBAL VARIABLES
-int highscore;
+int highscore;      // overall highscore from past games
+int currentScore = 0;   // current score user has in the game
 
 GLdouble width, height;
 int wd;
@@ -351,8 +352,24 @@ void drawHealthbar(int health){
     int difference;
     if (health > 0){
         difference = 2 * (100 - health);
+
+        // increase their current score
+        currentScore += 1;
+        // compare scores
+        if (currentScore > highscore){
+            highscore = currentScore;
+        }
+
     } else {
         difference = 200;
+        // Game is over -> write updated highscore to file
+        ofstream fileOut;
+        fileOut.open("highscore.txt");
+        if (fileOut){
+            fileOut << highscore;
+        }
+        fileOut.close();
+
     }
 
     // red back health bar back splash
@@ -466,7 +483,6 @@ int main(int argc, char** argv) {
         stringstream oldScore(fileLine);
         oldScore >> highscore;
     }
-    cout << highscore;
     infile.close();
 
     init();
@@ -506,14 +522,6 @@ int main(int argc, char** argv) {
 
     // Enter the event-processing loop
     glutMainLoop();
-
-    // Code to write out highscore at the end of the game
-//    ofstream fileOut;
-//    fileOut.open("highscore.txt");
-//    if (fileOut){
-//        fileOut << highscore;
-//    }
-//    fileOut.close();
 
     return 0;
 }
