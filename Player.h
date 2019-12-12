@@ -5,10 +5,10 @@
 #ifndef TEST_GAME_PLAYER_H
 #define TEST_GAME_PLAYER_H
 
-#include "Object.h"
+#include "Obstacle.h"
 enum state{rising, falling, neither};
 
-class Player : public Object {
+class Player : public Rectangle {
 private:
     int yHeight;
     state jumpState;

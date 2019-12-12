@@ -14,7 +14,7 @@
 #include <GL/glut.h>
 #endif
 
-#include "Object.h"
+#include "Obstacle.h"
 #include "Player.h"
 
 // Program initialization NOT OpenGL/GLUT dependent,
@@ -49,6 +49,6 @@ void drawBackground();
 
 void drawHealthbar(int health);
 
-bool collision(Player player, Object obstacle);
+bool collision(Player player, Obstacle obstacle);
 
 #endif /* graphics_h */

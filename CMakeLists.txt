@@ -26,7 +26,7 @@ file(GLOB SOURCE_FILES
         *.h
         )
 
-add_executable(main.cpp graphics.h game.cpp Object.cpp Object.h Player.cpp Player.h ${SOURCE_FILES} )
+add_executable(main.cpp graphics.h game.cpp Player.cpp Player.h ${SOURCE_FILES} Obstacle.cpp Obstacle.h Rectangle.h)
 
 if (WIN32)
     target_link_libraries (main.cpp ${OPENGL_LIBRARIES} freeglut)

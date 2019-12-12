@@ -1,17 +1,22 @@
 #include "graphics.h"
-#include "Object.h"
+#include "Obstacle.h"
 #include "Player.h"
+#include "Rectangle.h"
 #include <iostream>
 #include <vector>
 #include <unistd.h>
 #include <thread>
+#include <memory>
 
 using namespace std;
-
 
 // GLOBAL VARIABLES
 GLdouble width, height;
 int wd;
+
+
+enum screenState {pending, running};
+screenState screen = pending;
 
 // create game window
 void init() {
@@ -25,14 +30,19 @@ int health = 100;
 color testColor{1.0, 0.0, 0.0}; // red
 
 // create walls / obstacles
-Object wall1(40, 15, 1150, testColor);
-Object wall2(30, 15, 1000, testColor);
-Object wall3(35, 20, 800, testColor);
-Object wall4(30, 10, 500, testColor);
+Obstacle wall1(40, 15, 1150, testColor);
+Obstacle wall2(30, 15, 1000, testColor);
+Obstacle wall3(35, 20, 800, testColor);
+Obstacle wall4(30, 10, 500, testColor);
 
 Player player(20, 20, 80, color{1.0, 1.0, 1.0}, 400); // test player on ground (yHeight = 400)
 
-vector<Object> walls{wall1, wall2, wall3, wall4};
+vector<Obstacle> walls{wall1, wall2, wall3, wall4};
+
+//vector<unique_ptr<class Rectangle>> gameObjects{make_unique<Obstacle>(40, 15, 1150, testColor),
+//        make_unique<Obstacle>(30, 15, 1000, testColor), make_unique<Obstacle>(35, 20, 800, testColor),
+//                make_unique<Obstacle>(30, 10, 500, testColor),
+//                        make_unique<Player>(20, 20, 80, color{1.0, 1.0, 1.0}, 400)};
 
 // initialize OpenGL graphics
 void initGL() {
@@ -40,6 +50,9 @@ void initGL() {
 }
 
 void display() {
+    int xPos = width / 2; // for user messages
+    int yPos = height / 2;
+
     // tell OpenGL to use the whole window for drawing
     glViewport(0, 0, width, height);
 
@@ -52,30 +65,33 @@ void display() {
     glClear(GL_COLOR_BUFFER_BIT);   // clear the color buffer with current clearing color
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-    // -- begin drawing --
-
-    //////////////////// COLLISION DETECTION BETWEEN PLAYER AND OBSTACLES ////////////////
-
-    // check for collisions with each generated wall
-    for (Object &wall : walls){
-        if (collision(player, wall)){
-            health -= 2; // decrease health
+    if (screen == pending) {
+        string message = "Ready to get jumpy? Hit 's' to continue!"; // welcome message for user
+        glRasterPos2i(xPos - (4 * message.length()), yPos + 7);
+        for (const char &letter : message) {
+            glutBitmapCharacter(GLUT_BITMAP_8_BY_13, letter);
         }
+    } else {
+        //////////////////// COLLISION DETECTION BETWEEN PLAYER AND OBSTACLES ////////////////
+
+        // check for collisions with each generated wall
+        for (Obstacle &wall : walls) {
+            if (collision(player, wall)) {
+                health -= 2; // decrease health
+            }
+        }
+        ///////////////////////////////////////////////////////////////////////////////////////
+        drawBackground(); // draw background to screen
+        drawHealthbar(health); // draw health bar
+
+        //////////////////// DRAW EACH WALL / OBSTACLE TO SCREEN //////////////////////////
+
+        for (Obstacle &wall : walls) {
+            wall.draw();
+        }
+        ///////////////////////////////////////////////////////////////////////////////////
+        player.draw(); // draw player to screen
     }
-
-
-    ///////////////////////////////////////////////////////////////////////////////////////
-    drawBackground(); // draw background to screen
-    drawHealthbar(health); // draw health bar
-
-    //////////////////// DRAW EACH WALL / OBSTACLE TO SCREEN //////////////////////////
-
-    for (Object &wall : walls){
-        wall.draw();
-    }
-    ///////////////////////////////////////////////////////////////////////////////////
-    player.draw(); // draw player to screen
-
     glEnd();
     glFlush();  // render now
 }
@@ -129,7 +145,7 @@ void drawHealthbar(int health){
 
 }
 
-bool collision(Player player, Object obstacle){
+bool collision(Player player, Obstacle obstacle){
     Point l1 = player.getTopLeft();
     Point r1 = player.getBottomRight();
     Point l2 = obstacle.getTopLeft();
@@ -172,6 +188,10 @@ void kbd(unsigned char key, int x, int y)
         player.setJumpState(rising);
     }
 
+    if (key == 's'){
+        screen = running;
+    }
+
     glutPostRedisplay();
 
 }
@@ -187,15 +207,15 @@ void mouse(int button, int state, int x, int y) {
 }
 
 void timer(int dummy) {
+    if (screen == running) {
+        // update all wall positions (move them to the left)
+        for (Obstacle &wall : walls) {
+            wall.update();
+        }
 
-    // update all wall positions (move them to the left)
-    for (Object &wall : walls){
-        wall.update();
+        ////////////////////////////////////////////////////
+        player.jumpListener();
     }
-
-    ////////////////////////////////////////////////////
-    player.jumpListener();
-
     glutPostRedisplay();
     glutTimerFunc(30, timer, dummy);
 }
