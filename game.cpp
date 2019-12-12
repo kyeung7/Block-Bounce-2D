@@ -20,7 +20,7 @@ int currentScore = 0;   // current score user has in the game
 GLdouble width, height;
 int wd;
 
-enum screenState {pending, help, running};
+enum screenState {pending, help, running, gameover};
 screenState screen = pending;
 
 enum timeOfDay {day, night};
@@ -308,6 +308,23 @@ void display() {
         ///////////////////////////////////////////////////////////////////////////////////
         player.draw(); // draw player to screen
 
+    } else if (screen == gameover){
+        string endMessage = "Game Over, You Ran Out of Health!"; // welcome message for user
+        glRasterPos2i(xPos - (4 * endMessage.length()), yPos - 50);
+        for (const char &letter : endMessage) {
+            glutBitmapCharacter(GLUT_BITMAP_8_BY_13, letter);
+        }
+
+        string yourScoreMessage = "Your score was: " + to_string(currentScore); // currentScore message
+        glRasterPos2i(xPos - (4 * yourScoreMessage.length()), yPos + 10);
+        for (const char &letter : yourScoreMessage) {
+            glutBitmapCharacter(GLUT_BITMAP_8_BY_13, letter);
+        }
+        string bestScoreMessage = "The high score is: " + to_string(highscore); // high score message
+        glRasterPos2i(xPos - (4 * bestScoreMessage.length()), yPos + 30);
+        for (const char &letter : bestScoreMessage) {
+            glutBitmapCharacter(GLUT_BITMAP_8_BY_13, letter);
+        }
     }
 
     else {
@@ -387,6 +404,8 @@ void drawHealthbar(int health){
         }
         fileOut.close();
 
+        // gameover
+        screen = gameover;
     }
 
     // red back health bar back splash
