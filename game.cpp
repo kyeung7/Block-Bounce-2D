@@ -21,7 +21,15 @@ enum timeOfDay {day, night};
 timeOfDay background = day;
 
 //...............................
+int moonPosition = 600;
+int sunPosition = 600;
 
+double sun_HighX = 600; double sun_LowX = 630; double sun_LowY = 120; double sun_HighY = 150;
+
+double cloud1_HighX = 700; double cloud1_LowX = 630; double cloud1_LowY = 120; double cloud1_HighY = 150;
+double cloud2_HighX = 230; double cloud2_LowX = 160; double cloud2_LowY = 80; double cloud2_HighY = 120;
+double cloud3_HighX = 430; double cloud3_LowX = 530; double cloud3_LowY = 140; double cloud3_HighY = 180;
+double cloud4_HighX = 100; double cloud4_LowX = 30; double cloud4_LowY = 170; double cloud4_HighY = 200;
 
 //night time
 void drawBackground_night(){
@@ -47,10 +55,42 @@ void drawBackground_night(){
     glVertex2i(750, 0);
     glVertex2i(750, 400);
     glVertex2i(0, 400);
+
+    // clouds
+    glColor3f(0.0, 0.0, 0.2);
+    glVertex2i(0, 0);
+    glVertex2i(750, 0);
+    glVertex2i(750, 400);
+    glVertex2i(0, 400);
+
+    // stars
+
+    // moon
 }
 
 //day time
 void drawBackground_day(){
+
+    // animates clouds and resets
+    cloud1_HighX -= 0.6; cloud1_LowX -= 0.6;
+    cloud2_HighX -= 1; cloud2_LowX -= 1;
+    cloud3_HighX -= 0.3; cloud3_LowX -= 0.3;
+    cloud4_HighX -= 0.05; cloud4_LowX -= 0.05;
+
+    //resets clouds when left boundries reached, replaces outside screen on right
+    if (cloud1_HighX <= -100) {
+        cloud1_HighX = 750 + (cloud1_HighX - cloud1_LowX);;
+        cloud1_LowX = 750;
+    } else if (cloud2_HighX <= -100) {
+        cloud2_HighX = 750 + (cloud2_HighX - cloud2_LowX);;
+        cloud2_LowX = 750;
+    } else if (cloud3_HighX <= -100) {
+        cloud3_HighX = 750 + (cloud3_HighX - cloud3_LowX);;
+        cloud3_LowX = 750;
+    } else if (cloud4_HighX <= -100) {
+        cloud4_HighX = 750 + (cloud4_HighX - cloud4_LowX);;
+        cloud4_LowX = 750;
+    }
 
     glBegin(GL_QUADS);
     // floor
@@ -67,12 +107,75 @@ void drawBackground_day(){
     glVertex2i(750, 500);
     glVertex2i(0, 500);
 
-    //day sky
+    // day sky
     glColor3f(0.1, 0.8, 1);
     glVertex2i(0, 0);
     glVertex2i(750, 0);
     glVertex2i(750, 400);
     glVertex2i(0, 400);
+
+    // sun
+    glColor3f(0.8, 1, 0.0);
+    glVertex2i(sun_LowX + (rand() % 3), sun_LowY + (rand() % 3));
+    glVertex2i(sun_HighX + (rand() % 3), sun_LowY + (rand() % 3));
+    glVertex2i(sun_HighX + (rand() % 3), sun_HighY + (rand() % 3));
+
+    glVertex2i(sun_LowX + (rand() % 3), sun_HighY + (rand() % 3));
+
+    // Cloud groups 1
+    glColor3f(1, 1, 1);
+    glVertex2i(cloud1_LowX, cloud1_LowY); // top left
+    glVertex2i(cloud1_HighX, cloud1_LowY); //top right
+    glVertex2i(cloud1_HighX, cloud1_HighY); //bottom right
+    glVertex2i(cloud1_LowX, cloud1_HighY); // bottom left
+
+    glColor3f(1, 1, 1);
+    glVertex2i(cloud1_LowX-30, cloud1_LowY+10); // top left
+    glVertex2i(cloud1_HighX-30, cloud1_LowY+10); //top right
+    glVertex2i(cloud1_HighX-30, cloud1_HighY+10); //bottom right
+    glVertex2i(cloud1_LowX-30, cloud1_HighY+10); // bottom left
+
+    // Cloud groups 2
+    glColor3f(1, 1, 1);
+    glVertex2i(cloud2_LowX, cloud2_LowY); // top left
+    glVertex2i(cloud2_HighX, cloud2_LowY); //top right
+    glVertex2i(cloud2_HighX, cloud2_HighY); //bottom right
+    glVertex2i(cloud2_LowX, cloud2_HighY); // bottom left
+
+    glVertex2i(cloud2_LowX-40, cloud2_LowY+10); // top left
+    glVertex2i(cloud2_HighX-40, cloud2_LowY+10); //top right
+    glVertex2i(cloud2_HighX-40, cloud2_HighY+10); //bottom right
+    glVertex2i(cloud2_LowX-40, cloud2_HighY+10); // bottom left
+
+    // Cloud groups 3
+    glColor3f(1, 1, 1);
+    glVertex2i(cloud3_LowX, cloud3_LowY); // top left
+    glVertex2i(cloud3_HighX, cloud3_LowY); //top right
+    glVertex2i(cloud3_HighX, cloud3_HighY); //bottom right
+    glVertex2i(cloud3_LowX, cloud3_HighY); // bottom left
+
+    glVertex2i(cloud3_LowX-60, cloud3_LowY+20); // top left
+    glVertex2i(cloud3_HighX-60, cloud3_LowY+20); //top right
+    glVertex2i(cloud3_HighX-60, cloud3_HighY+20); //bottom right
+    glVertex2i(cloud3_LowX-60, cloud3_HighY+20); // bottom left
+
+    glVertex2i(cloud3_LowX+30, cloud3_LowY+10); // top left
+    glVertex2i(cloud3_HighX+30, cloud3_LowY+10); //top right
+    glVertex2i(cloud3_HighX+30, cloud3_HighY+10); //bottom right
+    glVertex2i(cloud3_LowX+30, cloud3_HighY+10); // bottom left
+
+    // Cloud groups 4
+    glColor3f(1, 1, 1);
+    glVertex2i(cloud4_LowX, cloud4_LowY); // top left
+    glVertex2i(cloud4_HighX, cloud4_LowY); //top right
+    glVertex2i(cloud4_HighX, cloud4_HighY); //bottom right
+    glVertex2i(cloud4_LowX, cloud4_HighY); // bottom left
+
+    glColor3f(1, 1, 1);
+    glVertex2i(cloud4_LowX+20, cloud4_LowY-10); // top left
+    glVertex2i(cloud4_HighX+20, cloud4_LowY-10); //top right
+    glVertex2i(cloud4_HighX+20, cloud4_HighY-10); //bottom right
+    glVertex2i(cloud4_LowX+20, cloud4_HighY-10); // bottom left
 }
 //..............................
 
