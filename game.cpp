@@ -233,6 +233,12 @@ void display() {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     if (screen == pending) {
+        string welcome = "Welcome to Block Bounce!"; // welcome message for user
+        glRasterPos2i(xPos - (4 * welcome.length()), yPos - 50);
+        for (const char &letter : welcome) {
+            glutBitmapCharacter(GLUT_BITMAP_8_BY_13, letter);
+        }
+
         string message = "Use arrow keys to select the time of day. Press enter to continue."; // welcome message for user
         glRasterPos2i(xPos - (4 * message.length()), yPos + 7);
         for (const char &letter : message) {
@@ -283,6 +289,17 @@ void display() {
 
         drawHealthbar(health); // draw health bar
 
+        // Trying to write scores to screen
+//        string message = "Use arrow keys to select the time of day. Press enter to continue."; // welcome message for user
+//        glRasterPos2i(xPos - (4 * message.length()), yPos + 7);
+//        for (const char &letter : message) {
+//            glutBitmapCharacter(GLUT_BITMAP_8_BY_13, letter);
+//        }
+        string userScoreMessage = to_string(currentScore);
+        glRasterPos2i(xPos - (4 * userScoreMessage.length()), yPos + 7);
+        for (const char &letter : userScoreMessage) {
+            glutBitmapCharacter(GLUT_BITMAP_8_BY_13, letter);
+        }
         //////////////////// DRAW EACH WALL / OBSTACLE TO SCREEN //////////////////////////
 
         for (Obstacle &wall : walls) {
