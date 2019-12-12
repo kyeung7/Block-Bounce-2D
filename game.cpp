@@ -14,12 +14,67 @@ using namespace std;
 GLdouble width, height;
 int wd;
 
-
 enum screenState {pending, running};
 screenState screen = pending;
 
 enum timeOfDay {day, night};
 timeOfDay background = day;
+
+//...............................
+
+
+//night time
+void drawBackground_night(){
+
+    glBegin(GL_QUADS);
+    // grey floor
+    glColor3f(0.5, 0.5, 0.5);
+    glVertex2i(0, 400);
+    glVertex2i(750, 400);
+    glVertex2i(750, 415);
+    glVertex2i(0, 415);
+
+    // dark green grass
+    glColor3f(0.0, 0.2, 0.1);
+    glVertex2i(0, 415);
+    glVertex2i(750, 415);
+    glVertex2i(750, 500);
+    glVertex2i(0, 500);
+
+    // night sky
+    glColor3f(0.0, 0.0, 0.2);
+    glVertex2i(0, 0);
+    glVertex2i(750, 0);
+    glVertex2i(750, 400);
+    glVertex2i(0, 400);
+}
+
+//day time
+void drawBackground_day(){
+
+    glBegin(GL_QUADS);
+    // floor
+    glColor3f(0.6, 0.6, 0.6);
+    glVertex2i(0, 400);
+    glVertex2i(750, 400);
+    glVertex2i(750, 415);
+    glVertex2i(0, 415);
+
+    // grass
+    glColor3f(0.0, 0.8, 0.1);
+    glVertex2i(0, 415);
+    glVertex2i(750, 415);
+    glVertex2i(750, 500);
+    glVertex2i(0, 500);
+
+    //day sky
+    glColor3f(0.1, 0.8, 1);
+    glVertex2i(0, 0);
+    glVertex2i(750, 0);
+    glVertex2i(750, 400);
+    glVertex2i(0, 400);
+}
+//..............................
 
 // create game window
 void init() {
@@ -97,7 +152,21 @@ void display() {
             }
         }
         ///////////////////////////////////////////////////////////////////////////////////////
-        drawBackground(); // draw background to screen
+        if (background == day) {
+        // draw day
+            drawBackground_day(); // drap map before content
+//        spawnBackground_sun();
+//        spawnBackground_day_clouds();
+        }
+
+        else if(background == night) {
+        //draw night
+            drawBackground_night(); // drap map before content
+//            spawnBackground_stars();
+//            spawnBackground_moon();
+//            spawnBackground_night_clouds();
+        }
+
         drawHealthbar(health); // draw health bar
 
         //////////////////// DRAW EACH WALL / OBSTACLE TO SCREEN //////////////////////////
