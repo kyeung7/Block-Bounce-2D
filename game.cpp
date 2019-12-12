@@ -89,7 +89,6 @@ void display() {
         }
     } else {
         //////////////////// COLLISION DETECTION BETWEEN PLAYER AND OBSTACLES ////////////////
-
         // check for collisions with each generated wall
         for (Obstacle &wall : walls) {
             if (collision(player, wall)) {
