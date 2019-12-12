@@ -7,10 +7,15 @@
 #include <unistd.h>
 #include <thread>
 #include <memory>
+#include <fstream>
+#include <string>
+#include <sstream>
 
 using namespace std;
 
 // GLOBAL VARIABLES
+int highscore;
+
 GLdouble width, height;
 int wd;
 
@@ -410,6 +415,17 @@ void timer(int dummy) {
 
 /* Main function: GLUT runs as a console application starting at main()  */
 int main(int argc, char** argv) {
+    // Read in old highscore from highscore.txt file
+    ifstream infile;
+    infile.open("highscore.txt");
+    string fileLine;
+    if(infile){
+        getline(infile, fileLine);
+        stringstream oldScore(fileLine);
+        oldScore >> highscore;
+    }
+    cout << highscore;
+    infile.close();
 
     init();
 
@@ -448,6 +464,14 @@ int main(int argc, char** argv) {
 
     // Enter the event-processing loop
     glutMainLoop();
+
+    // Code to write out highscore at the end of the game
+//    ofstream fileOut;
+//    fileOut.open("highscore.txt");
+//    if (fileOut){
+//        fileOut << highscore;
+//    }
+//    fileOut.close();
 
     return 0;
 }
