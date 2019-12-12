@@ -18,6 +18,9 @@ int wd;
 enum screenState {pending, running};
 screenState screen = pending;
 
+enum timeOfDay {day, night};
+timeOfDay background = day;
+
 // create game window
 void init() {
     width = 750;
@@ -66,10 +69,23 @@ void display() {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     if (screen == pending) {
-        string message = "Ready to get jumpy? Hit 's' to continue!"; // welcome message for user
+        string message = "Use arrow keys to select the time of day. Press enter to continue."; // welcome message for user
         glRasterPos2i(xPos - (4 * message.length()), yPos + 7);
         for (const char &letter : message) {
             glutBitmapCharacter(GLUT_BITMAP_8_BY_13, letter);
+        }
+        if (background == day) {
+            string daySelect = "[day]                night"; // day background selected
+            glRasterPos2i(xPos - (4 * daySelect.length()), yPos + 40);
+            for (const char &letter : daySelect) {
+                glutBitmapCharacter(GLUT_BITMAP_8_BY_13, letter);
+            }
+        } else {
+            string daySelect = " day                [night]"; // night background selected
+            glRasterPos2i(xPos - (4 * daySelect.length()), yPos + 40);
+            for (const char &letter : daySelect) {
+                glutBitmapCharacter(GLUT_BITMAP_8_BY_13, letter);
+            }
         }
     } else {
         //////////////////// COLLISION DETECTION BETWEEN PLAYER AND OBSTACLES ////////////////
@@ -168,10 +184,10 @@ void kbdS(int key, int x, int y) {
 
             break;
         case GLUT_KEY_LEFT:
-
+            background = day;
             break;
         case GLUT_KEY_RIGHT:
-
+            background = night;
             break;
         case GLUT_KEY_UP:
 
@@ -188,7 +204,7 @@ void kbd(unsigned char key, int x, int y)
         player.setJumpState(rising);
     }
 
-    if (key == 's'){
+    if (key == 13){ // enter key to start game
         screen = running;
     }
 
