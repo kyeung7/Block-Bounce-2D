@@ -19,7 +19,7 @@ int highscore;
 GLdouble width, height;
 int wd;
 
-enum screenState {pending, running};
+enum screenState {pending, help, running};
 screenState screen = pending;
 
 enum timeOfDay {day, night};
@@ -237,6 +237,12 @@ void display() {
         for (const char &letter : message) {
             glutBitmapCharacter(GLUT_BITMAP_8_BY_13, letter);
         }
+        string userHelp = "Press 'h' for help"; // welcome message for user
+        glRasterPos2i(xPos - (4 * userHelp.length()), yPos + 80);
+        for (const char &letter : userHelp) {
+            glutBitmapCharacter(GLUT_BITMAP_8_BY_13, letter);
+        }
+
         if (background == day) {
             string daySelect = "[day]                night"; // day background selected
             glRasterPos2i(xPos - (4 * daySelect.length()), yPos + 40);
@@ -250,9 +256,8 @@ void display() {
                 glutBitmapCharacter(GLUT_BITMAP_8_BY_13, letter);
             }
         }
-    } else {
+    } else if (screen == running) {
         //////////////////// COLLISION DETECTION BETWEEN PLAYER AND OBSTACLES ////////////////
-
         // check for collisions with each generated wall
         for (Obstacle &wall : walls) {
             if (collision(player, wall)) {
@@ -284,6 +289,35 @@ void display() {
         }
         ///////////////////////////////////////////////////////////////////////////////////
         player.draw(); // draw player to screen
+
+    }
+
+    else {
+
+        string helpMessage1 = "Press the space bar to jump.";
+        glRasterPos2i(xPos - (4 * helpMessage1.length()), yPos - 13);
+        for (const char &letter : helpMessage1) {
+            glutBitmapCharacter(GLUT_BITMAP_8_BY_13, letter);
+        }
+
+        string helpMessage2 = "Avoid obstacles to maintain your health.";
+        glRasterPos2i(xPos - (4 * helpMessage2.length()), yPos + 17);
+        for (const char &letter : helpMessage2) {
+            glutBitmapCharacter(GLUT_BITMAP_8_BY_13, letter);
+        }
+
+        string helpMessage3 = "Use the arrow keys to change the time of day.";
+        glRasterPos2i(xPos - (4 * helpMessage3.length()), yPos + 47);
+        for (const char &letter : helpMessage3) {
+            glutBitmapCharacter(GLUT_BITMAP_8_BY_13, letter);
+        }
+
+        string helpMessage4 = "(Press 'esc' to go back)";
+        glRasterPos2i(xPos - (4 * helpMessage4.length()), yPos + 230 );
+        for (const char &letter : helpMessage4) {
+            glutBitmapCharacter(GLUT_BITMAP_8_BY_13, letter);
+        }
+
     }
     glEnd();
     glFlush();  // render now
@@ -383,6 +417,14 @@ void kbd(unsigned char key, int x, int y)
 
     if (key == 13){ // enter key to start game
         screen = running;
+    }
+
+    if (key == 'h'){ // display help message
+        screen = help;
+    }
+
+    if (key == 27){ // esc for going back to main screen
+        screen = pending;
     }
 
     glutPostRedisplay();
