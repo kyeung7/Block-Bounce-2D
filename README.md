@@ -24,3 +24,4 @@ score from others who've played the game. Another feature is that the game can b
 of others who've used the application. 
 
 # Thank You!
+*** NOTE DO NOT MOVE MOUSE WHILE PROGRAM IS ACTIVE ***
