@@ -11,11 +11,6 @@ private:
     int yHeight;
     state jumpState;
 public:
-//    int height;
-//    int width;
-//    int distance;
-//    int yHeight;
-
     Player(int height, int width, int distance, color objCol, int yHeight);
 
     int getHeight();

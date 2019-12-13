@@ -1171,6 +1171,8 @@ void display() {
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////
+
+
         if (background == day) {
             xmas = false;
             drawBackground_day(); // drap map before content
@@ -1184,12 +1186,10 @@ void display() {
 
         drawHealthbar(health); // draw health bar
 
-//        // Trying to write scores to screen
-//        string message = "Use arrow keys to select the time of day. Press enter to continue."; // welcome message for user
-//        glRasterPos2i(xPos - (4 * message.length()), yPos + 7);
-//        for (const char &letter : message) {
-//            glutBitmapCharacter(GLUT_BITMAP_8_BY_13, letter);
-//        }
+        updatePlayerItems();
+
+
+
         string userScoreMessage = to_string(currentScore);
         glRasterPos2i(xPos - (4 * userScoreMessage.length()), yPos + 7);
         for (const char &letter : userScoreMessage) {
@@ -1202,7 +1202,7 @@ void display() {
         }
         ///////////////////////////////////////////////////////////////////////////////////
         player.draw(); // draw player to screen
-        updatePlayerItems();
+        //updatePlayerItems();
 
 
         ///////////////////////////
