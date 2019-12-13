@@ -16,10 +16,11 @@ using namespace std;
 // GLOBAL VARIABLES
 int highscore;      // overall highscore from past games
 int currentScore = 0;   // current score user has in the game
+int counter = 0;
 
 GLdouble width, height;
 int wd;
-
+bool playerHit = false;
 enum screenState {pending, help, running, gameover};
 screenState screen = pending;
 
@@ -399,13 +400,13 @@ void init() {
 int health = 100;
 
 // wall / obstacle color
-color testColor{1.0, 0.0, 0.0}; // red
+color testColor{1.0, 0.0, 0.1}; // red
 
 // create walls / obstacles
 Obstacle wall1(40, 15, 1150, testColor);
 Obstacle wall2(30, 15, 1000, testColor);
 Obstacle wall3(35, 20, 800, testColor);
-Obstacle wall4(30, 10, 500, testColor);
+Obstacle wall4(30, 10, 50, testColor);
 
 Player player(20, 20, 80, color{1.0, 1.0, 1.0}, 400); // test player on ground (yHeight = 400)
 
@@ -469,13 +470,22 @@ void display() {
             }
         }
     } else if (screen == running) {
+        counter += 1;
         //////////////////// COLLISION DETECTION BETWEEN PLAYER AND OBSTACLES ////////////////
         // check for collisions with each generated wall
         for (Obstacle &wall : walls) {
             if (collision(player, wall)) {
+                playerHit = true;
+                player.setColor(playerHit);
                 health -= 2; // decrease health
             }
+            else if (counter > 10){ // colors player when hit wall
+                counter = 0;
+                playerHit = false;
+                player.setColor(playerHit);
+            }
         }
+
         ///////////////////////////////////////////////////////////////////////////////////////
         if (background == day) {
         // draw day
@@ -563,29 +573,6 @@ void display() {
     glFlush();  // render now
 }
 
-void drawBackground(){
-    glBegin(GL_QUADS);
-    // grey floor
-    glColor3f(0.5, 0.5, 0.5);
-    glVertex2i(0, 400);
-    glVertex2i(750, 400);
-    glVertex2i(750, 415);
-    glVertex2i(0, 415);
-
-    // green grass
-    glColor3f(0.0, 0.4, 0.0);
-    glVertex2i(0, 415);
-    glVertex2i(750, 415);
-    glVertex2i(750, 500);
-    glVertex2i(0, 500);
-
-    // blue sky
-    glColor3f(0.18, 0.3, 0.84);
-    glVertex2i(0, 0);
-    glVertex2i(750, 0);
-    glVertex2i(750, 400);
-    glVertex2i(0, 400);
-}
 
 void drawHealthbar(int health){
     int difference;
@@ -626,7 +613,6 @@ void drawHealthbar(int health){
     glVertex2i(475 - difference, 450); // alter
     glVertex2i(475 - difference, 470); // alter
     glVertex2i(275, 470);
-
 
 }
 

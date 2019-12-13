@@ -1,6 +1,4 @@
-//
-// Created by CHBADMIN on 12/1/2019.
-//
+
 
 #include "Player.h"
 #include "graphics.h"
@@ -23,12 +21,20 @@ void Player::draw(){
     glVertex2i(distance - (width / 2), yHeight);
 }
 
-void Player::jumpListener(){
-    if (jumpState == rising || jumpState == falling){ // if in process of jumping, turn bright purple
-        this->objColor = color{1.0, 0.2, 0.8};
+void Player::setColor(bool collision){
+    if (collision == true){ // if hit wall
+        this->objColor = color{1.0, 0.1, 0.1};
     } else {
         this->objColor = color{1.0, 1.0, 1.0}; // otherwise player goes back to white
     }
+}
+
+void Player::jumpListener(){
+//    if (jumpState == rising || jumpState == falling){ // if in process of jumping, turn bright purple
+//        this->objColor = color{1.0, 0.2, 0.8};
+//    } else {
+//        this->objColor = color{1.0, 1.0, 1.0}; // otherwise player goes back to white
+//    }
 
     if (jumpState == rising && yHeight > 330){
         this->yHeight -= 8;
