@@ -85,10 +85,18 @@ double mountain3_TopX = 190; double mountain3_TopY = 320;
 double mountain4_TopX = 245; double mountain4_TopY = 250;
 double mountain5_TopX = 440; double mountain5_TopY = 290;
 double mountain6_TopX = 650; double mountain6_TopY = 240;
+//
+//double snowman1_HighX = 350; double snowman1_LowX = 300; double snowman1_LowY = 370; double snowman1_HighY = 400;
+//double snowman2_HighX = 730; double snowman2_LowX = 730; double snowman2_LowY = 370; double snowman2_HighY = 400;
 
-double snowman1_Base_HighX = 350; double snowman1_Base_LowX = 300; double snowman1_Base_LowY = 370; double snowman1_Base_HighY = 400;
-double snowman1_Body_HighX = 347; double snowman1_Body_LowX = 303; double snowman1_Body_LowY = 350; double snowman1_Body_HighY = 370;
-double snowman1_Head_HighX = 340; double snowman1_Head_LowX = 310; double snowman1_Head_LowY = 330; double snowman1_Head_HighY = 350;
+
+double tree1_HighX = 300; double tree1_LowX = 200; double tree1_LowY = 380; double tree1_HighY = 310;
+double tree2_HighX = 550; double tree2_LowX = 450; double tree2_LowY = 378; double tree2_HighY = 325;
+double tree3_HighX = 670; double tree3_LowX = 570; double tree3_LowY = 370; double tree3_HighY = 330;
+double tree4_HighX = 120; double tree4_LowX = 20; double tree4_LowY = 375; double tree4_HighY = 335;
+
+
+
 
 void drawBackground_night(){
 
@@ -427,6 +435,28 @@ void drawBackground_day(){
 //holiday time
 void drawBackground_holiday(){
 ///////////////////////////////////////////////////////////
+    //animates trees
+    tree1_HighX -= 2; tree1_LowX -= 2;
+    tree2_HighX -= 2; tree2_LowX -= 2;
+    tree3_HighX -= 2; tree3_LowX -= 2;
+    tree4_HighX -= 2; tree4_LowX -= 2;
+
+
+    //resets tree when left boundries reached, replaces outside screen on right
+    if (tree1_HighX <= -50) {
+        tree1_HighX = 850;
+        tree1_LowX = 750;
+    } else if (tree2_HighX <= -50) {
+        tree2_HighX = 850;
+        tree2_LowX = 750;
+    } else if (tree3_HighX <= -50) {
+        tree3_HighX = 850;
+        tree3_LowX = 750;
+    } else if (tree4_HighX <= -50) {
+        tree4_HighX = 850;
+        tree4_LowX = 750;
+    }
+
     // animates clouds and resets
     cloud1_HighX -= 0.4; cloud1_LowX -= 0.4;
     cloud2_HighX -= 0.06; cloud2_LowX -= 0.06;
@@ -801,22 +831,121 @@ void drawBackground_holiday(){
     glVertex2i(750, 500);
     glVertex2i(0, 500);
 ///////////////////////////////
-    // snowman
-    glColor3f(0.8, 0.8, 0.89);
-    glVertex2i(snowman1_Base_LowX, snowman1_Base_LowY);
-    glVertex2i(snowman1_Base_HighX, snowman1_Base_LowY);
-    glVertex2i(snowman1_Base_HighX, snowman1_Base_HighY);
-    glVertex2i(snowman1_Base_LowX, snowman1_Base_HighY);
+//    // snowman
+//    glColor3f(0.8, 0.8, 0.89);
+//    glVertex2i(snowman1_HighX, snowman1_HighY);
+//    glVertex2i(snowman1_LowX, snowman1_LowY);
+//    glVertex2i(snowman1_LowX, snowman1_LowY);
+//    glVertex2i(snowman1_HighX, snowman1_HighY);
+//
+//    glVertex2i(snowman1_HighX + 10, snowman1_LowY);
+//    glVertex2i(snowman1_LowX - 10, snowman1_LowY - 30);
+//    glVertex2i(snowman1_LowX - 10, snowman1_LowY - 30);
+//    glVertex2i(snowman1_HighX + 10, snowman1_LowY);
+//
+////    glVertex2i(snowman1_HighX, snowman1_HighY);
+////    glVertex2i(snowman1_LowX, snowman1_LowY);
+////    glVertex2i(snowman1_LowX, snowman1_LowY);
+////    glVertex2i(snowman1_HighX, snowman1_HighY);
+////////////////////
+    // trees
+    glColor3f(0.005, 0.137, 0.022);
+    glVertex2i((tree1_HighX + tree1_LowX)/2, tree1_HighY); //top right = top left
+    glVertex2i((tree1_HighX + tree1_LowX)/2, tree1_HighY);
+    glVertex2i(tree1_HighX, tree1_LowY);
+    glVertex2i(tree1_LowX, tree1_LowY);
 
-    glVertex2i(snowman1_Body_LowX, snowman1_Body_LowY);
-    glVertex2i(snowman1_Body_HighX, snowman1_Body_LowY);
-    glVertex2i(snowman1_Body_HighX, snowman1_Body_HighY);
-    glVertex2i(snowman1_Body_LowX, snowman1_Body_HighY);
+    glVertex2i((tree1_HighX + tree1_LowX)/2, tree1_HighY - 20); //top right = top left
+    glVertex2i((tree1_HighX + tree1_LowX)/2, tree1_HighY - 20);
+    glVertex2i(tree1_HighX - 8, tree1_LowY-20); // smaller width of tree
+    glVertex2i(tree1_LowX + 8, tree1_LowY-20);
 
-    glVertex2i(snowman1_Head_LowX, snowman1_Head_LowY);
-    glVertex2i(snowman1_Head_HighX, snowman1_Head_LowY);
-    glVertex2i(snowman1_Head_HighX, snowman1_Head_HighY);
-    glVertex2i(snowman1_Head_LowX, snowman1_Head_HighY);
+    glVertex2i((tree1_HighX + tree1_LowX)/2, tree1_HighY - 40); //top right = top left
+    glVertex2i((tree1_HighX + tree1_LowX)/2, tree1_HighY - 40);
+    glVertex2i(tree1_HighX - 15, tree1_LowY-40); // smaller width of tree
+    glVertex2i(tree1_LowX + 15, tree1_LowY-40);
+
+    // tree stump
+    glColor3f(0.119, 0.085, 0.06);
+    glVertex2i(((tree1_HighX + tree1_LowX)/2) - 10, tree1_LowY); //topleft
+    glVertex2i(((tree1_HighX + tree1_LowX)/2) + 10, tree1_LowY);//topright
+    glVertex2i(((tree1_HighX + tree1_LowX)/2) + 10, 400); //stump to ground
+    glVertex2i(((tree1_HighX + tree1_LowX)/2) - 10, 400);
+
+
+    // trees
+    glColor3f(0.005, 0.137, 0.022);
+    glVertex2i((tree2_HighX + tree2_LowX)/2, tree2_HighY); //top right = top left
+    glVertex2i((tree2_HighX + tree2_LowX)/2, tree2_HighY);
+    glVertex2i(tree2_HighX, tree2_LowY);
+    glVertex2i(tree2_LowX, tree2_LowY);
+
+    glVertex2i((tree2_HighX + tree2_LowX)/2, tree2_HighY - 20); //top right = top left
+    glVertex2i((tree2_HighX + tree2_LowX)/2, tree2_HighY - 20);
+    glVertex2i(tree2_HighX - 8, tree2_LowY-20); // smaller width of tree
+    glVertex2i(tree2_LowX + 8, tree2_LowY-20);
+
+    glVertex2i((tree2_HighX + tree2_LowX)/2, tree2_HighY - 40); //top right = top left
+    glVertex2i((tree2_HighX + tree2_LowX)/2, tree2_HighY - 40);
+    glVertex2i(tree2_HighX - 15, tree2_LowY-40); // smaller width of tree
+    glVertex2i(tree2_LowX + 15, tree2_LowY-40);
+
+    // tree stump
+    glColor3f(0.119, 0.085, 0.06);
+    glVertex2i(((tree2_HighX + tree2_LowX)/2) - 10, tree2_LowY); //topleft
+    glVertex2i(((tree2_HighX + tree2_LowX)/2) + 10, tree2_LowY);//topright
+    glVertex2i(((tree2_HighX + tree2_LowX)/2) + 10, 400); //stump to ground
+    glVertex2i(((tree2_HighX + tree2_LowX)/2) - 10, 400);
+
+
+    // trees
+    glColor3f(0.005, 0.137, 0.022);
+    glVertex2i((tree3_HighX + tree3_LowX)/2, tree3_HighY); //top right = top left
+    glVertex2i((tree3_HighX + tree3_LowX)/2, tree3_HighY);
+    glVertex2i(tree3_HighX, tree3_LowY);
+    glVertex2i(tree3_LowX, tree3_LowY);
+
+    glVertex2i((tree3_HighX + tree3_LowX)/2, tree3_HighY - 20); //top right = top left
+    glVertex2i((tree3_HighX + tree3_LowX)/2, tree3_HighY - 20);
+    glVertex2i(tree3_HighX - 8, tree3_LowY-20); // smaller width of tree
+    glVertex2i(tree3_LowX + 8, tree3_LowY-20);
+
+    glVertex2i((tree3_HighX + tree3_LowX)/2, tree3_HighY - 40); //top right = top left
+    glVertex2i((tree3_HighX + tree3_LowX)/2, tree3_HighY - 40);
+    glVertex2i(tree3_HighX - 15, tree3_LowY-40); // smaller width of tree
+    glVertex2i(tree3_LowX + 15, tree3_LowY-40);
+
+    // tree stump
+    glColor3f(0.119, 0.085, 0.06);
+    glVertex2i(((tree3_HighX + tree3_LowX)/2) - 10, tree3_LowY); //topleft
+    glVertex2i(((tree3_HighX + tree3_LowX)/2) + 10, tree3_LowY);//topright
+    glVertex2i(((tree3_HighX + tree3_LowX)/2) + 10, 400); //stump to ground
+    glVertex2i(((tree3_HighX + tree3_LowX)/2) - 10, 400);
+
+
+    // trees
+    glColor3f(0.005, 0.137, 0.022);
+    glVertex2i((tree4_HighX + tree4_LowX)/2, tree4_HighY); //top right = top left
+    glVertex2i((tree4_HighX + tree4_LowX)/2, tree4_HighY);
+    glVertex2i(tree4_HighX, tree4_LowY);
+    glVertex2i(tree4_LowX, tree4_LowY);
+
+    glVertex2i((tree4_HighX + tree4_LowX)/2, tree4_HighY - 20); //top right = top left
+    glVertex2i((tree4_HighX + tree4_LowX)/2, tree4_HighY - 20);
+    glVertex2i(tree4_HighX - 8, tree4_LowY-20); // smaller width of tree
+    glVertex2i(tree4_LowX + 8, tree4_LowY-20);
+
+    glVertex2i((tree4_HighX + tree4_LowX)/2, tree4_HighY - 40); //top right = top left
+    glVertex2i((tree4_HighX + tree4_LowX)/2, tree4_HighY - 40);
+    glVertex2i(tree4_HighX - 15, tree4_LowY-40); // smaller width of tree
+    glVertex2i(tree4_LowX + 15, tree4_LowY-40);
+
+    // tree stump
+    glColor3f(0.119, 0.085, 0.06);
+    glVertex2i(((tree4_HighX + tree4_LowX)/2) - 10, tree4_LowY); //topleft
+    glVertex2i(((tree4_HighX + tree4_LowX)/2) + 10, tree4_LowY);//topright
+    glVertex2i(((tree4_HighX + tree4_LowX)/2) + 10, 400); //stump to ground
+    glVertex2i(((tree4_HighX + tree4_LowX)/2) - 10, 400);
 ////////////////////
 
     // snow
@@ -1009,7 +1138,8 @@ void updatePlayerItems(){
     double playerYHeight = player.getYHeight();
 
     if (player.getJumpState() == 1){ //blinking eye from jump
-                //eyes 1 -- BLINKING
+
+        //eyes 1 -- BLINKING
         glColor3f(0,0,0);
         glVertex2i(playerDistance - (playerWidth / 2) + 5, (playerYHeight - playerHeight)); //top left corner
         glVertex2i(playerDistance + (playerWidth / 2) - 10, (playerYHeight - playerHeight)); // top right
@@ -1081,7 +1211,6 @@ void updatePlayerItems(){
             glVertex2i(playerDistance - (playerWidth / 2) - 15, (playerYHeight - playerHeight) - 18);
             glVertex2i(playerDistance - (playerWidth / 2) - 10, (playerYHeight - playerHeight) - 18);
         }
-
     }
 }
 //vector<unique_ptr<class Rectangle>> gameObjects{make_unique<Obstacle>(40, 15, 1150, testColor),
@@ -1155,6 +1284,7 @@ void display() {
         }
     } else if (screen == running) {
         counter += 1;
+        cout << "Current Score: " << currentScore << endl;
         //////////////////// COLLISION DETECTION BETWEEN PLAYER AND OBSTACLES ////////////////
         // check for collisions with each generated wall
         for (Obstacle &wall : walls) {
@@ -1188,8 +1318,6 @@ void display() {
 
         updatePlayerItems();
 
-
-
         string userScoreMessage = to_string(currentScore);
         glRasterPos2i(xPos - (4 * userScoreMessage.length()), yPos + 7);
         for (const char &letter : userScoreMessage) {
@@ -1202,7 +1330,9 @@ void display() {
         }
         ///////////////////////////////////////////////////////////////////////////////////
         player.draw(); // draw player to screen
-        //updatePlayerItems();
+
+        if (health >0)
+            updatePlayerItems();
 
 
         ///////////////////////////
@@ -1261,6 +1391,7 @@ void display() {
 
     glEnd();
     glFlush();  // render now
+
 }
 
 
