@@ -24,10 +24,13 @@ bool playerHit = false;
 enum screenState {pending, help, running, gameover};
 screenState screen = pending;
 
-enum timeOfDay {day, night};
+enum timeOfDay {day, night, holiday};
 timeOfDay background = day;
 
 //...............................
+int menuKeyTracker = 0;
+bool xmas = false; // only activated if holiday map chosen
+
 double sun_HighX = 600; double sun_LowX = 630; double sun_LowY = 120; double sun_HighY = 150;
 double moon_HighX = 500; double moon_LowX = 520; double moon_LowY = 90; double moon_HighY = 110;
 
@@ -41,10 +44,15 @@ double star7_HighX = 520; double star7_LowX = 522; double star7_LowY = 160; doub
 double star8_HighX = 580; double star8_LowX = 582; double star8_LowY = 60; double star8_HighY = 62;
 double star9_HighX = 700; double star9_LowX = 702; double star9_LowY = 120; double star9_HighY = 122;
 
-double cloud1_HighX = 700; double cloud1_LowX = 630; double cloud1_LowY = 120; double cloud1_HighY = 150;
-double cloud2_HighX = 230; double cloud2_LowX = 160; double cloud2_LowY = 80; double cloud2_HighY = 120;
-double cloud3_HighX = 430; double cloud3_LowX = 530; double cloud3_LowY = 140; double cloud3_HighY = 180;
-double cloud4_HighX = 100; double cloud4_LowX = 30; double cloud4_LowY = 170; double cloud4_HighY = 200;
+double cloud1_HighX = 700; double cloud1_LowX = 540; double cloud1_LowY = 120; double cloud1_HighY = 150;
+double cloud2_HighX = 230; double cloud2_LowX = 140; double cloud2_LowY = 80; double cloud2_HighY = 120;
+double cloud3_HighX = 430; double cloud3_LowX = 120; double cloud3_LowY = 140; double cloud3_HighY = 145;
+double cloud4_HighX = 100; double cloud4_LowX = 10; double cloud4_LowY = 130; double cloud4_HighY = 160;
+double cloud5_HighX = 760; double cloud5_LowX = 440; double cloud5_LowY = 30; double cloud5_HighY = 125;
+double cloud6_HighX = 500; double cloud6_LowX = 290; double cloud6_LowY = 10; double cloud6_HighY = 150;
+double cloud7_HighX = 330; double cloud7_LowX = 200; double cloud7_LowY = 70; double cloud7_HighY = 135;
+double cloud8_HighX = 500; double cloud8_LowX = 290; double cloud8_LowY = 110; double cloud8_HighY = 140;
+double cloud9_HighX = 330; double cloud9_LowX = 200; double cloud9_LowY = 70; double cloud9_HighY = 130;
 
 // peak values for mountain
 double mountain1_TopX = 20; double mountain1_TopY = 300;
@@ -389,6 +397,261 @@ void drawBackground_day(){
     glVertex2i(cloud4_HighX+20, cloud4_HighY-10); //bottom right
     glVertex2i(cloud4_LowX+20, cloud4_HighY-10); // bottom left
 }
+
+//holiday time
+void drawBackground_holiday(){
+
+    // animates clouds and resets
+    cloud1_HighX -= 0.4; cloud1_LowX -= 0.4;
+    cloud2_HighX -= 0.06; cloud2_LowX -= 0.06;
+    cloud3_HighX -= 0.3; cloud3_LowX -= 0.3;
+    cloud4_HighX -= 0.05; cloud4_LowX -= 0.05;
+    cloud5_HighX -= 0.1; cloud5_LowX -= 0.1;
+    cloud6_HighX -= 0.5; cloud6_LowX -= 0.5;
+    cloud7_HighX -= 0.3; cloud7_LowX -= 0.3;
+    cloud8_HighX -= 0.1; cloud8_LowX -= 0.1;
+    cloud9_HighX -= 0.2; cloud9_LowX -= 0.2;
+
+    //resets clouds when left boundries reached, replaces outside screen on right
+    if (cloud1_HighX <= -100) {
+        cloud1_HighX = 750 + (cloud1_HighX - cloud1_LowX);;
+        cloud1_LowX = 750;
+    } else if (cloud2_HighX <= -100) {
+        cloud2_HighX = 750 + (cloud2_HighX - cloud2_LowX);;
+        cloud2_LowX = 750;
+    } else if (cloud3_HighX <= -100) {
+        cloud3_HighX = 750 + (cloud3_HighX - cloud3_LowX);;
+        cloud3_LowX = 750;
+    } else if (cloud4_HighX <= -100) {
+        cloud4_HighX = 750 + (cloud4_HighX - cloud4_LowX);;
+        cloud4_LowX = 750;
+    }
+
+    glBegin(GL_QUADS);
+
+    // night sky
+    glColor3f(0.0, 0.0, 0.2);
+    glVertex2i(0, 0);
+    glVertex2i(750, 0);
+    glVertex2i(750, 400);
+    glVertex2i(0, 400);
+
+    // mountain
+    glColor3f(0.0, 0.0, 0.1);
+    glVertex2i(mountain1_TopX, mountain1_TopY); // top
+    glVertex2i(mountain1_TopX + 200, mountain1_TopY + 100); //right
+    glVertex2i(mountain1_TopX, mountain1_TopY + 500); //bottom
+    glVertex2i(mountain1_TopX - 200 , mountain1_TopY + 100); //  left
+
+    glVertex2i(mountain2_TopX, mountain2_TopY); // top
+    glVertex2i(mountain2_TopX + 200, mountain2_TopY + 100); //right
+    glVertex2i(mountain2_TopX, mountain2_TopY + 500); //bottom
+    glVertex2i(mountain2_TopX - 200 , mountain2_TopY + 100); //  left
+
+    glVertex2i(mountain3_TopX, mountain3_TopY); // top
+    glVertex2i(mountain3_TopX + 200, mountain3_TopY + 100); //right
+    glVertex2i(mountain3_TopX, mountain3_TopY + 500); //bottom
+    glVertex2i(mountain3_TopX - 200 , mountain3_TopY + 100); //  left
+
+    glVertex2i(mountain4_TopX, mountain4_TopY); // top
+    glVertex2i(mountain4_TopX + 200, mountain4_TopY + 100); //right
+    glVertex2i(mountain4_TopX, mountain4_TopY + 500); //bottom
+    glVertex2i(mountain4_TopX - 200 , mountain4_TopY + 100); //  left
+
+    glVertex2i(mountain5_TopX, mountain5_TopY); // top
+    glVertex2i(mountain5_TopX + 200, mountain5_TopY + 100); //right
+    glVertex2i(mountain5_TopX, mountain5_TopY + 500); //bottom
+    glVertex2i(mountain5_TopX - 200 , mountain5_TopY + 100); //  left
+
+    glVertex2i(mountain6_TopX, mountain6_TopY); // top
+    glVertex2i(mountain6_TopX + 200, mountain6_TopY + 100); //right
+    glVertex2i(mountain6_TopX, mountain6_TopY + 500); //bottom
+    glVertex2i(mountain6_TopX - 200 , mountain6_TopY + 100); //  left
+
+    // grey floor
+    glColor3f(0.5, 0.5, 0.5);
+    glVertex2i(0, 400);
+    glVertex2i(750, 400);
+    glVertex2i(750, 415);
+    glVertex2i(0, 415);
+
+    // dark green grass
+    glColor3f(0.0, 0.2, 0.1);
+    glVertex2i(0, 415);
+    glVertex2i(750, 415);
+    glVertex2i(750, 500);
+    glVertex2i(0, 500);
+
+    // moon
+    glColor3f(0.9, 0.8, 0.6);
+    glVertex2i(moon_LowX + (rand() % 2), moon_LowY + (rand() % 2));
+    glVertex2i(moon_HighX + (rand() % 2), moon_LowY + (rand() % 2));
+    glVertex2i(moon_HighX + (rand() % 2), moon_HighY + (rand() % 2));
+    glVertex2i(moon_LowX + (rand() % 2), moon_HighY + (rand() % 2));
+
+    // stars
+    glColor3f(1, 1, 1);
+    glVertex2i(star1_LowX + rand() % 2, star1_LowY + rand() % 2);
+    glVertex2i(star1_HighX + rand() % 2, star1_LowY + rand() % 2);
+    glVertex2i(star1_HighX + rand() % 2, star1_HighY + rand() % 2);
+    glVertex2i(star1_LowX + rand() % 2, star1_HighY + rand() % 2);
+
+    glColor3f(1, 1, 1);
+    glVertex2i(star2_LowX + rand() % 2, star2_LowY + rand() % 2);
+    glVertex2i(star2_HighX + rand() % 2, star2_LowY + rand() % 2);
+    glVertex2i(star2_HighX + rand() % 2, star2_HighY + rand() % 2);
+    glVertex2i(star2_LowX + rand() % 2, star2_HighY + rand() % 2);
+
+    glColor3f(1, 1, 1);
+    glVertex2i(star3_LowX + rand() % 2, star3_LowY + rand() % 2);
+    glVertex2i(star3_HighX + rand() % 2, star3_LowY + rand() % 2);
+    glVertex2i(star3_HighX + rand() % 2, star3_HighY + rand() % 2);
+    glVertex2i(star3_LowX + rand() % 2, star3_HighY + rand() % 2);
+
+    glColor3f(1, 1, 1);
+    glVertex2i(star4_LowX + rand() % 2, star4_LowY + rand() % 2);
+    glVertex2i(star4_HighX + rand() % 2, star4_LowY + rand() % 2);
+    glVertex2i(star4_HighX + rand() % 2, star4_HighY + rand() % 2);
+    glVertex2i(star4_LowX + rand() % 2, star4_HighY + rand() % 2);
+
+    glColor3f(1, 1, 1);
+    glVertex2i(star5_LowX + rand() % 2, star5_LowY + rand() % 2);
+    glVertex2i(star5_HighX + rand() % 2, star5_LowY + rand() % 2);
+    glVertex2i(star5_HighX + rand() % 2, star5_HighY + rand() % 2);
+    glVertex2i(star5_LowX + rand() % 2, star5_HighY + rand() % 2);
+
+    glColor3f(1, 1, 1);
+    glVertex2i(star6_LowX + rand() % 2, star6_LowY + rand() % 2);
+    glVertex2i(star6_HighX + rand() % 2, star6_LowY + rand() % 2);
+    glVertex2i(star6_HighX + rand() % 2, star6_HighY + rand() % 2);
+    glVertex2i(star6_LowX + rand() % 2, star6_HighY + rand() % 2);
+
+    glColor3f(1, 1, 1);
+    glVertex2i(star7_LowX + rand() % 2, star7_LowY + rand() % 2);
+    glVertex2i(star7_HighX + rand() % 2, star7_LowY + rand() % 2);
+    glVertex2i(star7_HighX + rand() % 2, star7_HighY + rand() % 2);
+    glVertex2i(star7_LowX + rand() % 2, star7_HighY + rand() % 2);
+
+    glColor3f(1, 1, 1);
+    glVertex2i(star8_LowX + rand() % 2, star8_LowY + rand() % 2);
+    glVertex2i(star8_HighX + rand() % 2, star8_LowY + rand() % 2);
+    glVertex2i(star8_HighX + rand() % 2, star8_HighY + rand() % 2);
+    glVertex2i(star8_LowX + rand() % 2, star8_HighY + rand() % 2);
+
+    glColor3f(1, 1, 1);
+    glVertex2i(star9_LowX + rand() % 2, star9_LowY + rand() % 2);
+    glVertex2i(star9_HighX + rand() % 2, star9_LowY + rand() % 2);
+    glVertex2i(star9_HighX + rand() % 2, star9_HighY + rand() % 2);
+    glVertex2i(star9_LowX + rand() % 2, star9_HighY + rand() % 2);
+
+    // Cloud groups 1
+    glColor3f(0.7, 0.7, 0.8);
+    glVertex2i(cloud1_LowX, cloud1_LowY); // top left
+    glVertex2i(cloud1_HighX, cloud1_LowY); //top right
+    glVertex2i(cloud1_HighX, cloud1_HighY); //bottom right
+    glVertex2i(cloud1_LowX, cloud1_HighY); // bottom left
+
+    glVertex2i(cloud1_LowX-30, cloud1_LowY+10); // top left
+    glVertex2i(cloud1_HighX-30, cloud1_LowY+10); //top right
+    glVertex2i(cloud1_HighX-30, cloud1_HighY+10); //bottom right
+    glVertex2i(cloud1_LowX-30, cloud1_HighY+10); // bottom left
+
+    // Cloud groups 2
+    glVertex2i(cloud2_LowX, cloud2_LowY); // top left
+    glVertex2i(cloud2_HighX, cloud2_LowY); //top right
+    glVertex2i(cloud2_HighX, cloud2_HighY); //bottom right
+    glVertex2i(cloud2_LowX, cloud2_HighY); // bottom left
+
+    glVertex2i(cloud2_LowX-40, cloud2_LowY+10); // top left
+    glVertex2i(cloud2_HighX-40, cloud2_LowY+10); //top right
+    glVertex2i(cloud2_HighX-40, cloud2_HighY+10); //bottom right
+    glVertex2i(cloud2_LowX-40, cloud2_HighY+10); // bottom left
+
+    // Cloud groups 3
+
+    glVertex2i(cloud3_LowX, cloud3_LowY); // top left
+    glVertex2i(cloud3_HighX, cloud3_LowY); //top right
+    glVertex2i(cloud3_HighX, cloud3_HighY); //bottom right
+    glVertex2i(cloud3_LowX, cloud3_HighY); // bottom left
+
+    glVertex2i(cloud3_LowX-60, cloud3_LowY+20); // top left
+    glVertex2i(cloud3_HighX-60, cloud3_LowY+20); //top right
+    glVertex2i(cloud3_HighX-60, cloud3_HighY+20); //bottom right
+    glVertex2i(cloud3_LowX-60, cloud3_HighY+20); // bottom left
+
+    glVertex2i(cloud3_LowX+30, cloud3_LowY+10); // top left
+    glVertex2i(cloud3_HighX+30, cloud3_LowY+10); //top right
+    glVertex2i(cloud3_HighX+30, cloud3_HighY+10); //bottom right
+    glVertex2i(cloud3_LowX+30, cloud3_HighY+10); // bottom left
+
+    // Cloud groups 4
+    glVertex2i(cloud4_LowX, cloud4_LowY); // top left
+    glVertex2i(cloud4_HighX, cloud4_LowY); //top right
+    glVertex2i(cloud4_HighX, cloud4_HighY); //bottom right
+    glVertex2i(cloud4_LowX, cloud4_HighY); // bottom left
+
+    glVertex2i(cloud4_LowX+20, cloud4_LowY-10); // top left
+    glVertex2i(cloud4_HighX+20, cloud4_LowY-10); //top right
+    glVertex2i(cloud4_HighX+20, cloud4_HighY-10); //bottom right
+    glVertex2i(cloud4_LowX+20, cloud4_HighY-10); // bottom left
+
+    // Cloud groups 5
+    glVertex2i(cloud5_LowX, cloud5_LowY); // top left
+    glVertex2i(cloud5_HighX, cloud5_LowY); //top right
+    glVertex2i(cloud5_HighX, cloud5_HighY); //bottom right
+    glVertex2i(cloud5_LowX, cloud5_HighY); // bottom left
+
+    glVertex2i(cloud5_LowX+20, cloud5_LowY-10); // top left
+    glVertex2i(cloud5_HighX+20, cloud5_LowY-10); //top right
+    glVertex2i(cloud5_HighX+20, cloud5_HighY-10); //bottom right
+    glVertex2i(cloud5_LowX+20, cloud5_HighY-10); // bottom left
+
+    // Cloud groups 6
+    glVertex2i(cloud6_LowX, cloud6_LowY); // top left
+    glVertex2i(cloud6_HighX, cloud6_LowY); //top right
+    glVertex2i(cloud6_HighX, cloud6_HighY); //bottom right
+    glVertex2i(cloud6_LowX, cloud6_HighY); // bottom left
+
+    glVertex2i(cloud6_LowX+20, cloud6_LowY-10); // top left
+    glVertex2i(cloud6_HighX+20, cloud6_LowY-10); //top right
+    glVertex2i(cloud6_HighX+20, cloud6_HighY-10); //bottom right
+    glVertex2i(cloud6_LowX+20, cloud6_HighY-10); // bottom left
+
+    // Cloud groups 7
+    glVertex2i(cloud7_LowX, cloud7_LowY); // top left
+    glVertex2i(cloud7_HighX, cloud7_LowY); //top right
+    glVertex2i(cloud7_HighX, cloud7_HighY); //bottom right
+    glVertex2i(cloud7_LowX, cloud7_HighY); // bottom left
+
+    glVertex2i(cloud7_LowX+20, cloud7_LowY-10); // top left
+    glVertex2i(cloud7_HighX+20, cloud7_LowY-10); //top right
+    glVertex2i(cloud7_HighX+20, cloud7_HighY-10); //bottom right
+    glVertex2i(cloud7_LowX+20, cloud7_HighY-10); // bottom left
+
+    // Cloud groups 8
+    glVertex2i(cloud8_LowX, cloud8_LowY); // top left
+    glVertex2i(cloud8_HighX, cloud8_LowY); //top right
+    glVertex2i(cloud8_HighX, cloud8_HighY); //bottom right
+    glVertex2i(cloud8_LowX, cloud8_HighY); // bottom left
+
+    glVertex2i(cloud8_LowX+20, cloud8_LowY-10); // top left
+    glVertex2i(cloud8_HighX+20, cloud8_LowY-10); //top right
+    glVertex2i(cloud8_HighX+20, cloud8_HighY-10); //bottom right
+    glVertex2i(cloud8_LowX+20, cloud8_HighY-10); // bottom left
+
+    // Cloud groups 9
+    glVertex2i(cloud9_LowX, cloud9_LowY); // top left
+    glVertex2i(cloud9_HighX, cloud9_LowY); //top right
+    glVertex2i(cloud9_HighX, cloud9_HighY); //bottom right
+    glVertex2i(cloud9_LowX, cloud9_HighY); // bottom left
+
+    glVertex2i(cloud9_LowX+20, cloud9_LowY-10); // top left
+    glVertex2i(cloud9_HighX+20, cloud9_LowY-10); //top right
+    glVertex2i(cloud9_HighX+20, cloud9_HighY-10); //bottom right
+    glVertex2i(cloud9_LowX+20, cloud9_HighY-10); // bottom left
+
+}
+
 //..............................
 
 // create game window
@@ -400,7 +663,8 @@ void init() {
 int health = 100;
 
 // wall / obstacle color
-color testColor{1.0, 0.0, 0.1}; // red
+//color testColor{1.0, 0.0, 0.1}; // red
+color testColor{1, 0, 0.2}; // red
 
 // create walls / obstacles
 Obstacle wall1(40, 15, 1600, testColor);
@@ -411,7 +675,88 @@ Obstacle wall4(30, 10, 400, testColor);
 Player player(20, 20, 80, color{1.0, 1.0, 1.0}, 400); // test player on ground (yHeight = 400)
 
 vector<Obstacle> walls{wall1, wall2, wall3, wall4};
+void updatePlayerItems(){
+    double playerDistance = player.getDistance();
+    double playerHeight = player.getHeight();
+    double playerWidth = player.getWidth();
+    double playerYHeight = player.getYHeight();
 
+    if (player.getJumpState() == 1){ //blinking eye from jump
+                //eyes 1 -- BLINKING
+        glColor3f(0,0,0);
+        glVertex2i(playerDistance - (playerWidth / 2) + 5, (playerYHeight - playerHeight)); //top left corner
+        glVertex2i(playerDistance + (playerWidth / 2) - 10, (playerYHeight - playerHeight)); // top right
+        glVertex2i(playerDistance + (playerWidth / 2) - 10, playerYHeight - 10);
+        glVertex2i(playerDistance - (playerWidth / 2) + 5, playerYHeight - 10);
+
+        //eyes 2
+        glVertex2i(playerDistance - (playerWidth / 2) + 13, (playerYHeight - playerHeight)); //top left corner
+        glVertex2i(playerDistance + (playerWidth / 2) - 2, (playerYHeight - playerHeight)); // top right
+        glVertex2i(playerDistance + (playerWidth / 2) - 2, playerYHeight - 10);
+        glVertex2i(playerDistance - (playerWidth / 2) + 13, playerYHeight - 10);
+
+        //this blocks initial grounded eye animation
+        //eyes 1, regular on ground
+        glColor3f(1, 1, 1);
+        glVertex2i(playerDistance - (playerWidth / 2) + 5, (playerYHeight - playerHeight) + 5); //top left corner
+        glVertex2i(playerDistance + (playerWidth / 2) - 10, (playerYHeight - playerHeight) + 5); // top right
+        glVertex2i(playerDistance + (playerWidth / 2) - 10, playerYHeight - 10);
+        glVertex2i(playerDistance - (playerWidth / 2) + 5, playerYHeight - 10);
+
+        //eyes 2
+        glVertex2i(playerDistance - (playerWidth / 2) + 13, (playerYHeight - playerHeight) + 5); //top left corner
+        glVertex2i(playerDistance + (playerWidth / 2) - 2, (playerYHeight - playerHeight) + 5); // top right
+        glVertex2i(playerDistance + (playerWidth / 2) - 2, playerYHeight - 10);
+        glVertex2i(playerDistance - (playerWidth / 2) + 13, playerYHeight - 10);
+
+        if (xmas){
+            //draw hat on player in air
+            glColor3f(1, 0, 0.1);
+            glVertex2i(playerDistance - (playerWidth / 2) - 13, (playerYHeight - playerHeight) - 11); //top
+            glVertex2i(playerDistance + (playerWidth / 2) - 10, (playerYHeight - playerHeight) - 10); // right
+            glVertex2i(playerDistance - (playerWidth / 2), (playerYHeight - playerHeight)); //bottom left
+            glVertex2i(playerDistance + (playerWidth / 2), (playerYHeight - playerHeight)); //  bottom right
+
+            //draw hat ball
+            glColor3f(1, 1, 1);
+            glVertex2i(playerDistance - (playerWidth / 2) - 10, (playerYHeight - playerHeight) - 9);
+            glVertex2i(playerDistance - (playerWidth / 2) - 15, (playerYHeight - playerHeight) - 9);
+            glVertex2i(playerDistance - (playerWidth / 2) - 15, (playerYHeight - playerHeight) - 13);
+            glVertex2i(playerDistance - (playerWidth / 2) - 10, (playerYHeight - playerHeight) - 13);
+        }
+
+    } else {
+        //eyes 1, regular on ground
+        glColor3f(0, 0, 0);
+        glVertex2i(playerDistance - (playerWidth / 2) + 5, (playerYHeight - playerHeight) + 5); //top left corner
+        glVertex2i(playerDistance + (playerWidth / 2) - 10, (playerYHeight - playerHeight) + 5); // top right
+        glVertex2i(playerDistance + (playerWidth / 2) - 10, playerYHeight - 10);
+        glVertex2i(playerDistance - (playerWidth / 2) + 5, playerYHeight - 10);
+
+        //eyes 2
+        glVertex2i(playerDistance - (playerWidth / 2) + 13, (playerYHeight - playerHeight) + 5); //top left corner
+        glVertex2i(playerDistance + (playerWidth / 2) - 2, (playerYHeight - playerHeight) + 5); // top right
+        glVertex2i(playerDistance + (playerWidth / 2) - 2, playerYHeight - 10);
+        glVertex2i(playerDistance - (playerWidth / 2) + 13, playerYHeight - 10);
+
+        if (xmas){
+            //draw hat on player on ground
+            glColor3f(1, 0, 0.1);
+            glVertex2i(playerDistance - (playerWidth / 2) - 13, (playerYHeight - playerHeight) - 16); //top
+            glVertex2i(playerDistance + (playerWidth / 2) - 10, (playerYHeight - playerHeight) - 15); // right
+            glVertex2i(playerDistance - (playerWidth / 2), (playerYHeight - playerHeight)); //bottom left
+            glVertex2i(playerDistance + (playerWidth / 2), (playerYHeight - playerHeight)); //  bottom right
+
+            //draw hat ball
+            glColor3f(1, 1, 1);
+            glVertex2i(playerDistance - (playerWidth / 2) - 10, (playerYHeight - playerHeight) - 14);
+            glVertex2i(playerDistance - (playerWidth / 2) - 15, (playerYHeight - playerHeight) - 14);
+            glVertex2i(playerDistance - (playerWidth / 2) - 15, (playerYHeight - playerHeight) - 18);
+            glVertex2i(playerDistance - (playerWidth / 2) - 10, (playerYHeight - playerHeight) - 18);
+        }
+
+    }
+}
 //vector<unique_ptr<class Rectangle>> gameObjects{make_unique<Obstacle>(40, 15, 1150, testColor),
 //        make_unique<Obstacle>(30, 15, 1000, testColor), make_unique<Obstacle>(35, 20, 800, testColor),
 //                make_unique<Obstacle>(30, 10, 500, testColor),
@@ -457,14 +802,26 @@ void display() {
         }
 
         if (background == day) {
-            string daySelect = "[day]                night"; // day background selected
+            string daySelect = "[day]                night                holiday"; // day background selected
             glRasterPos2i(xPos - (4 * daySelect.length()), yPos + 40);
+            health = 100; // resets health
+            currentScore = 0;
+            for (const char &letter : daySelect) {
+                glutBitmapCharacter(GLUT_BITMAP_8_BY_13, letter);
+            }
+        } else if (background == holiday){
+            string daySelect = "day                night                [holiday]"; // holiday background selected
+            glRasterPos2i(xPos - (4 * daySelect.length()), yPos + 40);
+            health = 100; // resets health
+            currentScore = 0;
             for (const char &letter : daySelect) {
                 glutBitmapCharacter(GLUT_BITMAP_8_BY_13, letter);
             }
         } else {
-            string daySelect = " day                [night]"; // night background selected
+            string daySelect = "day                [night]                holiday"; // night background selected
             glRasterPos2i(xPos - (4 * daySelect.length()), yPos + 40);
+            health = 100; // resets health
+            currentScore = 0;
             for (const char &letter : daySelect) {
                 glutBitmapCharacter(GLUT_BITMAP_8_BY_13, letter);
             }
@@ -488,23 +845,19 @@ void display() {
 
         ///////////////////////////////////////////////////////////////////////////////////////
         if (background == day) {
-        // draw day
+            xmas = false;
             drawBackground_day(); // drap map before content
-//        spawnBackground_sun();
-//        spawnBackground_day_clouds();
-        }
-
-        else if(background == night) {
-        //draw night
+        } else if(background == night) {
+            xmas = false;
             drawBackground_night(); // drap map before content
-//            spawnBackground_stars();
-//            spawnBackground_moon();
-//            spawnBackground_night_clouds();
+        } else if(background == holiday) {
+            xmas = true;
+            drawBackground_holiday(); // drap map before content
         }
 
         drawHealthbar(health); // draw health bar
 
-        // Trying to write scores to screen
+//        // Trying to write scores to screen
 //        string message = "Use arrow keys to select the time of day. Press enter to continue."; // welcome message for user
 //        glRasterPos2i(xPos - (4 * message.length()), yPos + 7);
 //        for (const char &letter : message) {
@@ -522,6 +875,10 @@ void display() {
         }
         ///////////////////////////////////////////////////////////////////////////////////
         player.draw(); // draw player to screen
+        updatePlayerItems();
+
+
+        ///////////////////////////
 
     } else if (screen == gameover){
         string endMessage = "Game Over, You Ran Out of Health!"; // welcome message for user
@@ -540,11 +897,16 @@ void display() {
         for (const char &letter : bestScoreMessage) {
             glutBitmapCharacter(GLUT_BITMAP_8_BY_13, letter);
         }
+        string returnMessage = "Press [esc] to return to the main menu. "; // return message
+        glRasterPos2i(xPos - (4 * returnMessage.length()), yPos + 60);
+        for (const char &letter : returnMessage) {
+            glutBitmapCharacter(GLUT_BITMAP_8_BY_13, letter);
+        }
     }
 
     else {
 
-        string helpMessage1 = "Press the space bar to jump.";
+        string helpMessage1 = "Press the [space bar] to jump.";
         glRasterPos2i(xPos - (4 * helpMessage1.length()), yPos - 13);
         for (const char &letter : helpMessage1) {
             glutBitmapCharacter(GLUT_BITMAP_8_BY_13, letter);
@@ -562,13 +924,14 @@ void display() {
             glutBitmapCharacter(GLUT_BITMAP_8_BY_13, letter);
         }
 
-        string helpMessage4 = "(Press 'esc' to go back)";
+        string helpMessage4 = "(Press [esc] to go back)";
         glRasterPos2i(xPos - (4 * helpMessage4.length()), yPos + 230 );
         for (const char &letter : helpMessage4) {
             glutBitmapCharacter(GLUT_BITMAP_8_BY_13, letter);
         }
 
     }
+
     glEnd();
     glFlush();  // render now
 }
@@ -636,18 +999,30 @@ bool collision(Player player, Obstacle obstacle){
 void kbdS(int key, int x, int y) {
     switch(key) {
         case GLUT_KEY_DOWN:
-
             break;
         case GLUT_KEY_LEFT:
-            background = day;
+            menuKeyTracker -= 1;
             break;
         case GLUT_KEY_RIGHT:
-            background = night;
+            menuKeyTracker += 1;
             break;
         case GLUT_KEY_UP:
-
             break;
     }
+
+    //cycles if user presses left or right
+    if (menuKeyTracker < 0)
+        menuKeyTracker = 2;
+    else if (menuKeyTracker > 2)
+        menuKeyTracker = 0;
+
+    // selects background mode depending on keytracker
+    if (menuKeyTracker == 0)
+        background = day;
+    else if (menuKeyTracker == 1)
+        background = night;
+    else if (menuKeyTracker == 2)
+        background = holiday;
 
     glutPostRedisplay();
 }

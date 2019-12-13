@@ -1,9 +1,9 @@
-
-
 #ifndef TEST_GAME_PLAYER_H
 #define TEST_GAME_PLAYER_H
 
 #include "Obstacle.h"
+
+using namespace std;
 enum state{rising, falling, neither};
 
 class Player : public Rectangle {
@@ -11,8 +11,18 @@ private:
     int yHeight;
     state jumpState;
 public:
+//    int height;
+//    int width;
+//    int distance;
+//    int yHeight;
 
     Player(int height, int width, int distance, color objCol, int yHeight);
+
+    int getHeight();
+    int getWidth();
+    int getDistance();
+    int getYHeight();
+    int getJumpState();
     void setColor(bool collision);
     void jumpListener();
     void setJumpState(state jumpState);

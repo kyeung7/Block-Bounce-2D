@@ -1,5 +1,3 @@
-
-
 #include "Player.h"
 #include "graphics.h"
 
@@ -13,12 +11,48 @@ Player::Player(int height, int width, int distance, color objCol, int yHeight){
 
 }
 
+int Player::getHeight(){
+    return height;
+}
+
+int Player::getWidth(){
+    return width;
+}
+
+int Player::getDistance(){
+    return distance;
+}
+
+int Player::getYHeight(){
+    return yHeight;
+}
+
+int Player::getJumpState(){
+    if (jumpState == rising) {
+        return 1; // jumping
+    } else
+        return 0; // still on ground or falling
+}
+
 void Player::draw(){
     glColor3f(objColor.r, objColor.g, objColor.b);
     glVertex2i(distance - (width / 2), (yHeight - height));
     glVertex2i(distance + (width / 2), (yHeight - height));
     glVertex2i(distance + (width / 2), yHeight);
     glVertex2i(distance - (width / 2), yHeight);
+
+//    //eyes 1
+//    glColor3f(0,0,0);
+//    glVertex2i(distance - (width / 2) + 5, (yHeight - height) + 5); //top left corner
+//    glVertex2i(distance + (width / 2) - 10, (yHeight - height) + 5); // top right
+//    glVertex2i(distance + (width / 2) - 10, yHeight - 10);
+//    glVertex2i(distance - (width / 2) + 5, yHeight - 10);
+//
+//    //eyes 2
+//    glVertex2i(distance - (width / 2) + 13, (yHeight - height) + 5); //top left corner
+//    glVertex2i(distance + (width / 2) - 2, (yHeight - height) + 5); // top right
+//    glVertex2i(distance + (width / 2) - 2, yHeight - 10);
+//    glVertex2i(distance - (width / 2) + 13, yHeight - 10);
 }
 
 void Player::setColor(bool collision){
@@ -38,6 +72,20 @@ void Player::jumpListener(){
 
     if (jumpState == rising && yHeight > 330){
         this->yHeight -= 8;
+
+//        //eyes 1 -- BLINKING
+//        glColor3f(0,0,0);
+//        glVertex2i(distance - (width / 2) + 5, (yHeight - height)); //top left corner
+//        glVertex2i(distance + (width / 2) - 10, (yHeight - height)); // top right
+//        glVertex2i(distance + (width / 2) - 10, yHeight - 10);
+//        glVertex2i(distance - (width / 2) + 5, yHeight - 10);
+//
+//        //eyes 2
+//        glVertex2i(distance - (width / 2) + 13, (yHeight - height)); //top left corner
+//        glVertex2i(distance + (width / 2) - 2, (yHeight - height)); // top right
+//        glVertex2i(distance + (width / 2) - 2, yHeight - 10);
+//        glVertex2i(distance - (width / 2) + 13, yHeight - 10);
+
         if (yHeight <= 330){
             jumpState = falling;
         }
