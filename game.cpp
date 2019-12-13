@@ -723,7 +723,7 @@ int main(int argc, char** argv) {
     glutInitWindowPosition(800, 400); // position the window's initial top-left corner
 
     /* create the window and store the handle to it */
-    wd = glutCreateWindow("Jumper Game"); // title
+    wd = glutCreateWindow("Block Bounce"); // title
 
     // register callback handler for window re-paint event
     glutDisplayFunc(display);
