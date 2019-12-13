@@ -403,10 +403,10 @@ int health = 100;
 color testColor{1.0, 0.0, 0.1}; // red
 
 // create walls / obstacles
-Obstacle wall1(40, 15, 1150, testColor);
-Obstacle wall2(30, 15, 1000, testColor);
-Obstacle wall3(35, 20, 800, testColor);
-Obstacle wall4(30, 10, 50, testColor);
+Obstacle wall1(40, 15, 1600, testColor);
+Obstacle wall2(30, 15, 1200, testColor);
+Obstacle wall3(35, 20, 1000, testColor);
+Obstacle wall4(30, 10, 400, testColor);
 
 Player player(20, 20, 80, color{1.0, 1.0, 1.0}, 400); // test player on ground (yHeight = 400)
 
