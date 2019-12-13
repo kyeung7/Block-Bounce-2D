@@ -1166,6 +1166,7 @@ void updatePlayerItems(){
         glVertex2i(playerDistance + (playerWidth / 2) - 2, playerYHeight - 10);
         glVertex2i(playerDistance - (playerWidth / 2) + 13, playerYHeight - 10);
 
+
         if (xmas){
             //draw hat on player in air
             glColor3f(1, 0, 0.1);
@@ -1337,7 +1338,8 @@ void display() {
 
         ///////////////////////////
 
-    } else if (screen == gameover){
+    }
+    else if (screen == gameover){
         string endMessage = "Game Over, You Ran Out of Health!"; // welcome message for user
         glRasterPos2i(xPos - (4 * endMessage.length()), yPos - 50);
         for (const char &letter : endMessage) {
