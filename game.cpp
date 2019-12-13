@@ -880,7 +880,8 @@ void display() {
 
         ///////////////////////////
 
-    } else if (screen == gameover){
+    }
+    else if (screen == gameover){
         string endMessage = "Game Over, You Ran Out of Health!"; // welcome message for user
         glRasterPos2i(xPos - (4 * endMessage.length()), yPos - 50);
         for (const char &letter : endMessage) {
