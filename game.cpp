@@ -709,6 +709,7 @@ void updatePlayerItems(){
         glVertex2i(playerDistance + (playerWidth / 2) - 2, playerYHeight - 10);
         glVertex2i(playerDistance - (playerWidth / 2) + 13, playerYHeight - 10);
 
+
         if (xmas){
             //draw hat on player in air
             glColor3f(1, 0, 0.1);
